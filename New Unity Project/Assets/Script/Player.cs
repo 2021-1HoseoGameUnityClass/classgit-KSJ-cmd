@@ -82,11 +82,23 @@ public class Player : MonoBehaviour
 
     private void Fire()
     {
+        
+        AudioClip audioClip = Resources.Load<AudioClip>("RangedAttack.ogg");
+        GetComponent<AudioSource>().clip = audioClip; 
         GetComponent<AudioSource>().Play();
         float direction = transform.localScale.x;
         Quaternion quaternion = new Quaternion(0, 0, 0, 0);
 
         Instantiate(bulletObj, InstantiateObj.transform.position, quaternion);
         GetComponent<Bullet>().InstantiateBullet(direction);
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "Enemy")
+        {
+            DataManager.instance.playerHP--;
+            UIManager.instance.PlayerHP();
+        }
     }
 }
